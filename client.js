@@ -1,21 +1,25 @@
 const net = require("net");
+const { IP, PORT } = require('./constants');
+const { setupInput } = require('./input');
 
 // establishes a connection with the game server
 const connect = function() {
   const conn = net.createConnection({
-    host: '165.227.47.243',
-    port: 50541,
+    host: IP,
+    port: PORT
   });
 
   // interpret incoming data as text
   conn.setEncoding("utf8");
 
-  conn.on('data', (data) => {
-    console.log(data);
+  conn.on('message', () => {
+    console.log('Connected...');
+    conn.write('Name: E4N');
   });
 
   return conn;
 };
 
-console.log("HeLlO...");
-connect();
+const conn = connect();
+setupInput(conn);
+module.exports = { connect };
